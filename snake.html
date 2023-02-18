@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da cobrinha</title>
+</head>
+<body>
+
+    <canvas id="stage" width="400" height="400"></canvas>
+    <script type="text/javascript">
+        window.onload = function() {
+            var stage = document.getElementById('stage');
+            var ctx = stage.getContext("2d");
+            document.addEventListener("keydown", KeyPush);
+            setInterval(game, 80);
+
+            const speed = 1;
+
+            var speedX = speedY = 0;
+            var positionX = positionY = 10;
+            var tP = 20;
+            var quantiP = 20;
+            var aX = aY = 15;
+
+            var trail = [];
+            tail = 5;
+
+            function game() {
+                positionX += speedX;
+                positionY += speedY;
+                if(positionX < 0){
+                    positionX = quantiP-1;
+                }if(positionX > quantiP-1){
+                    positionX = 0;
+                }if(positionY < 0){
+                    positionY = quantiP-1;
+                }if(positionY > quantiP-1){
+                    positionY = 0;
+                }
+
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, stage.width, stage.height);
+
+                ctx.fillStyle = "red";
+                ctx.fillRect(aX*tP, aY*tP, tP, tP);
+
+                ctx.fillStyle = "gray";
+                for(var i = 0; i<trail.length;i++){
+                    ctx.fillRect(trail[i].x*tP, trail[i].y* tP, tP-1, tP-1);
+                    if(trail[i]. x == positionX && trail[i].y == positionY) {
+                        speedX = speedY=0;
+                        tail = 5;
+                    }
+                }
+                trail.push({x:positionX,y:positionY})
+                while (trail.length > tail) {
+                    trail.shift();
+                }
+                if(aX==positionX && aY==positionY) {
+                    tail++;
+                    aX = Math.floor(Math.random()*quantiP);
+                    aY = Math.floor(Math.random()*quantiP);
+                }
+            }
+
+            function KeyPush(event) {
+                switch(event.keyCode) {
+                    case 37: //left
+                        speedX = -speed;
+                        speedY = 0;
+                        break;
+                    case 38: //up
+                        speedX = 0;
+                        speedY = -speed;
+                        break;
+                    case 39: //right
+                        speedX = speed;
+                        speedY = 0;
+                        break;
+                    case 40: //down
+                        speedX = 0;
+                        speedY = speed;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            
+        }
+    </script>
+    
+</body>
+</html>
